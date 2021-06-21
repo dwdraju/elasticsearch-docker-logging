@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  app:
+    image: alpine
+    command: [/bin/echo, "Listen my log!"]
+    depends_on:
+      - fluentbit
+    logging:
+      driver: fluentd
+      options:
+        tag: 'app'
+
+  fluentbit:
+    image: fluent/fluent-bit:1.7
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    hostname: 'app'
